@@ -1,21 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+//import AppNavigator from './AppNavigator';
+import CharterClubsNavigator from './src/CharterClubsNavigator';
 
-export default function App() {
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+
+import  ReduxThunk from 'redux-thunk';
+
+import ClubsReducer from './store/reducers/Clubs';
+import UsersReducer from './store/reducers/Users';
+import MeetingsReducer from './store/reducers/Meetings';
+
+const rootReducer = combineReducers({
+  clubs: ClubsReducer,
+  users: UsersReducer,
+  meetings: MeetingsReducer
+});
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
+
+const app = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <Provider store ={store}>
+      <CharterClubsNavigator />
+    </Provider>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default app;
